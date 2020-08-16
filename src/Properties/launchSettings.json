@@ -12,7 +12,6 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -20,10 +19,14 @@
     "Todo.API": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DATABASE_URL": "mongodb://localhost/todo",
+        "JWT_KEY": "SUPERRANDOMSUPERSECRETKEY",
+        "JWT_ISSUER": "niteshrestha",
+        "JWT_AUDIENCE": "niteshrestha",
+        "JWT_EXPIRE": "10"
       }
     }
   }
