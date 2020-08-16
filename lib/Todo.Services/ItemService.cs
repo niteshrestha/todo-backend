@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using Todo.Data.Model;
 
@@ -31,11 +30,16 @@ namespace Todo.Services
         public void Delete(string id, string userId) =>
             _items.DeleteOne(item => item.Id == id && item.UserId == userId);
 
-        public List<Item> Get(string userId) =>
-                _items.Find(item => item.UserId == userId && item.IsDone == false).ToList();
-
+        public List<Item> Get(string userId, bool showDone)
+        {
+            if (showDone)
+            {
+                return _items.Find(item => item.UserId == userId).ToList();
+            }
+            return _items.Find(item => item.UserId == userId && item.IsDone == false).ToList();
+        }
         public Item GetItem(string id, string userId) =>
-            _items.Find(item => item.Id == id && item.UserId == userId && item.IsDone == false).FirstOrDefault();
+            _items.Find(item => item.Id == id && item.UserId == userId).FirstOrDefault();
 
         public void ItemDone(string id, string userId, Item updatedItem) =>
             _items.ReplaceOne(item => item.Id == id && item.UserId == userId, updatedItem);
