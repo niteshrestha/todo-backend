@@ -29,6 +29,8 @@ namespace Todo.API
             services.ConfigureSwagger();
 
             services.ConfigureCors();
+
+            services.ConfigureDI();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
