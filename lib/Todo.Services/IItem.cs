@@ -6,7 +6,7 @@ namespace Todo.Services
     public interface IItem
     {
         Item GetItem(string id, string userId);
-        List<Item> Get(string userId);
+        List<Item> Get(string userId, bool showDone);
 
         string Create(Item item);
         void Delete(string id, string userId);

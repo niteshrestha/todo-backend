@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Mime;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +11,8 @@ using Todo.Services;
 namespace Todo.API.Controllers
 {
     [Authorize]
-    [Route("api/[controller]/[action]")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [Route("api/[controller]")]
     [ApiController]
     public class ItemController : ControllerBase
     {
@@ -26,15 +28,28 @@ namespace Todo.API.Controllers
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Get all todo items
+        /// </summary>
+        /// <param name="showDone"></param>
+        /// <returns></returns>
         [HttpGet]
-        public ActionResult<List<Item>> Get()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<List<Item>> Get(bool showDone)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var items = _itemService.Get(userId);
+            var items = _itemService.Get(userId, showDone);
             return items;
         }
 
-        [HttpGet("{id:length(24)}", Name = "GetItem")]
+        /// <summary>
+        /// Get a specific todo item
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id:length(24)}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Item> Get(string id)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -47,7 +62,14 @@ namespace Todo.API.Controllers
             return item;
         }
 
+        /// <summary>
+        /// Create a new todo item
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         [HttpPost]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public ActionResult Create(ItemInput input)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -64,8 +86,15 @@ namespace Todo.API.Controllers
             return CreatedAtRoute("GetItem", new { id = item.Id }, item);
         }
 
+        /// <summary>
+        /// Check item is done
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPut("{id:length(24)}")]
-        public IActionResult Update(string id)
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public IActionResult ItemDone(string id)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var item = _itemService.GetItem(id, userId);
@@ -80,7 +109,14 @@ namespace Todo.API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Delete a todo item
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id:length(24)}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult Delete(string id)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
