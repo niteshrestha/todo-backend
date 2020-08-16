@@ -12,7 +12,7 @@ namespace Todo.API.Extensions
             app.UseSwagger();
 
             app.UseSwaggerUI(options =>
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Event Management Analysis API v1")
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Todo API v1")
             );
         }
     }
