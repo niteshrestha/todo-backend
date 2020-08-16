@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Todo.Data.Identity;
+using Todo.Services;
 
 namespace Todo.API.Extensions
 {
@@ -86,6 +87,11 @@ namespace Todo.API.Extensions
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 options.IncludeXmlComments(xmlPath);
             });
+        }
+
+        public static void ConfigureDI(this IServiceCollection services)
+        {
+            services.AddSingleton<IItem, ItemService>();
         }
     }
 }
