@@ -26,7 +26,7 @@ namespace Todo.API.Helpers
                 issuer: Environment.GetEnvironmentVariable("JWT_ISSUER"),
                 audience: Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(expireDays),
+                expires: DateTime.Now.AddDays(expireDays),
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                 );
 
